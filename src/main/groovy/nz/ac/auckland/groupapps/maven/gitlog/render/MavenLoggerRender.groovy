@@ -1,5 +1,6 @@
 package nz.ac.auckland.groupapps.maven.gitlog.render
 
+import groovy.transform.CompileStatic
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.logging.SystemStreamLog
 import org.eclipse.jgit.revwalk.RevCommit
@@ -8,6 +9,7 @@ import org.eclipse.jgit.revwalk.RevCommit
  *
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
+@CompileStatic
 class MavenLoggerRender {
 
 	private final List<RevCommit> revCommitList
@@ -20,11 +22,10 @@ class MavenLoggerRender {
 		}
 		this.revCommitList = commitList
 		this.log = log
-
 	}
 
 	protected void renderEmptyLine() {
-		log.info("\n")
+		log.info('')
 	}
 
 	protected void renderSeparator() {
@@ -32,7 +33,7 @@ class MavenLoggerRender {
 	}
 
 	protected void renderCommit(RevCommit commit) {
-		log.info("${TimeRender.formatDatetime(commit.commitTime)} ${commit.shortMessage} (${commit.committerIdent.name} - ${commit.committerIdent.emailAddress})")
+		log.info(CommitRender.render(commit))
 	}
 
 	public void render() {

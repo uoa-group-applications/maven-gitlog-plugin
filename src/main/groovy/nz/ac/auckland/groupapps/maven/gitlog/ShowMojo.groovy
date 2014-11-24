@@ -1,5 +1,6 @@
 package nz.ac.auckland.groupapps.maven.gitlog
 
+import groovy.transform.CompileStatic
 import nz.ac.auckland.groupapps.maven.gitlog.render.MavenLoggerRender
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
@@ -20,12 +21,9 @@ import org.eclipse.jgit.revwalk.RevWalk
  *
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
+@CompileStatic
 @Mojo(name = 'show')
 public class ShowMojo extends AbstractMojo {
-
-	public final static List<String> IGNORE_PACKAGING_TYPE = ['pom', 'tile']
-
-	private final MavenLoggerRender loggerRender
 
 	@Parameter(required = true, readonly = true, property = "project")
 	protected MavenProject project
@@ -39,12 +37,11 @@ public class ShowMojo extends AbstractMojo {
 	@Override
 	void execute() throws MojoExecutionException, MojoFailureException {
 
-		if (IGNORE_PACKAGING_TYPE.contains(project.packaging?.toLowerCase())) {
+		if (PluginConstant.IGNORE_PACKAGING_TYPE.contains(project.packaging?.toLowerCase())) {
 			return
 		}
 
-		GitLogGenerator gitLogGenerator = new GitLogGenerator(log)
-		List<RevCommit> allCommits = gitLogGenerator.processGitLogs()
+		List<RevCommit> allCommits = GitLogGenerator.loadGitLogs(log)
 
 		MavenLoggerRender mavenLoggerRender = new MavenLoggerRender(allCommits, log)
 		mavenLoggerRender.render()

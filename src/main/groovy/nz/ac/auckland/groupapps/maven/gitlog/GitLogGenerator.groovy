@@ -1,5 +1,6 @@
 package nz.ac.auckland.groupapps.maven.gitlog
 
+import groovy.transform.CompileStatic
 import org.apache.maven.plugin.logging.Log
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.NoHeadException
@@ -13,14 +14,10 @@ import org.eclipse.jgit.revwalk.RevWalk
  */
 public class GitLogGenerator {
 
-	private final Log log
+	private GitLogGenerator() {}
 
-	public GitLogGenerator(Log log) {
-		this.log = log
-	}
-
-	public List<RevCommit> processGitLogs() {
-		List<RevCommit> allCommits = new ArrayList<>()
+	public static List<RevCommit> loadGitLogs(Log log) {
+		List<RevCommit> allCommits = []
 
 		try {
 			Repository repository = buildRepository()
@@ -43,7 +40,7 @@ public class GitLogGenerator {
 		return allCommits
 	}
 
-	public Repository buildRepository() {
+	protected static Repository buildRepository() {
 		return new RepositoryBuilder().findGitDir().build()
 	}
 
