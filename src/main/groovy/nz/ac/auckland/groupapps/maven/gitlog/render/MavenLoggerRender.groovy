@@ -10,24 +10,42 @@ import org.eclipse.jgit.revwalk.RevCommit
  */
 class MavenLoggerRender {
 
-	private final Log logger
+	private final List<RevCommit> revCommitList
 
-	public MavenLoggerRender(Log log) {
-		this.logger = log ?: new SystemStreamLog()
+	private final Log log
+
+	public MavenLoggerRender(List<RevCommit> commitList, Log log) {
+		if (!log) {
+			log = new SystemStreamLog()
+		}
+		this.revCommitList = commitList
+		this.log = log
+
 	}
 
-	public void renderHeader(String title) {
-		logger.info('=============================================================')
-		logger.info(title)
-		logger.info('=============================================================')
+	protected void renderEmptyLine() {
+		log.info("\n")
 	}
 
-	public void renderCommit(RevCommit commit) {
-		logger.info("${commit.commitTime} ${commit.shortMessage} (${commit.committerIdent.name} - ${commit.committerIdent.emailAddress})")
+	protected void renderSeparator() {
+		log.info('=============================================================')
 	}
 
-	public void renderFooter() {
-		logger.info("\n=============================================================")
+	protected void renderCommit(RevCommit commit) {
+		log.info("${TimeRender.formatDatetime(commit.commitTime)} ${commit.shortMessage} (${commit.committerIdent.name} - ${commit.committerIdent.emailAddress})")
+	}
+
+	public void render() {
+		renderSeparator()
+		renderEmptyLine()
+
+		revCommitList.each { RevCommit revCommit ->
+			renderCommit(revCommit)
+		}
+
+		renderEmptyLine()
+		log.info("Total ${revCommitList.size()} commits")
+		renderSeparator()
 	}
 
 }

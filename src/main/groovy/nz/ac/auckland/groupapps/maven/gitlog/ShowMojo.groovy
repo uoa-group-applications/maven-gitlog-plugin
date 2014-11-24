@@ -6,11 +6,14 @@ import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugins.annotations.Mojo
+import org.apache.maven.plugins.annotations.Parameter
+import org.apache.maven.project.MavenProject
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.NoHeadException
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.lib.RepositoryBuilder
 import org.eclipse.jgit.revwalk.RevCommit
+import org.eclipse.jgit.revwalk.RevWalk
 
 /**
  * @goal show
@@ -20,41 +23,31 @@ import org.eclipse.jgit.revwalk.RevCommit
 @Mojo(name = 'show')
 public class ShowMojo extends AbstractMojo {
 
+	public final static List<String> IGNORE_PACKAGING_TYPE = ['pom', 'tile']
+
 	private final MavenLoggerRender loggerRender
+
+	@Parameter(required = true, readonly = true, property = "project")
+	protected MavenProject project
 
 	private final Log log
 
 	public ShowMojo() {
 		log = getLog()
-		loggerRender = new MavenLoggerRender(log)
 	}
 
 	@Override
 	void execute() throws MojoExecutionException, MojoFailureException {
-		loggerRender.renderHeader("Start to loading commits")
 
-		Repository repository;
-
-		List<RevCommit> allCommits = new ArrayList<>()
-
-		try {
-			repository = new RepositoryBuilder().findGitDir().build()
-			Iterator<RevCommit> logs = new Git(repository).log().call()
-
-			while (logs.hasNext()) {
-				RevCommit revCommit = (RevCommit) logs.next()
-				allCommits.add(0, revCommit)
-				loggerRender.renderCommit(revCommit)
-			}
-
-			log.info("there are ${allCommits.size()} commits totally")
-		} catch (IllegalArgumentException iae) {
-			throw new NoGitRepositoryException()
-		} catch (NoHeadException nhEx) {
-			log.info("No commits be found")
+		if (IGNORE_PACKAGING_TYPE.contains(project.packaging?.toLowerCase())) {
+			return
 		}
 
-		loggerRender.renderFooter()
+		GitLogGenerator gitLogGenerator = new GitLogGenerator(log)
+		List<RevCommit> allCommits = gitLogGenerator.processGitLogs()
+
+		MavenLoggerRender mavenLoggerRender = new MavenLoggerRender(allCommits, log)
+		mavenLoggerRender.render()
 
 //		log.debug("Opened " + repository + ". About to load the commits.");
 //		walk = createWalk(repository);
@@ -118,7 +111,6 @@ public class ShowMojo extends AbstractMojo {
 //				log.debug("Light-weight tags not supported. Skipping " + ref.getName());
 //			}
 //		}
-
 
 
 }
