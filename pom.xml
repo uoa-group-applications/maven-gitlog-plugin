@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>nz.ac.auckland.groupapps.parent</groupId>
+		<artifactId>parent-groovy-groupapps-central</artifactId>
+		<version>1.5</version>
+	</parent>
+
+	<groupId>nz.ac.auckland.groupapps.maven</groupId>
+	<artifactId>maven-gitlog-plugin</artifactId>
+	<version>1.1-SNAPSHOT</version>
+	<packaging>maven-plugin</packaging>
+	<name>Maven Release Note Plugin</name>
+	<description>
+		Generates a release note based on commits to a git repository in text format 
+		showing the changes that are included in each version.
+
+		A possible use of this is to push these changelogs to a remote server when 
+		releasing the maven project so that the remote server can lookup and update
+		JIRA ticket based on an accurate list of commits that the current package includes.
+	</description>
+	<url>git@github.com:uoa-group-applications/maven-gitlog-plugin.git</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>nz.net.osnz.composite</groupId>
+			<artifactId>composite-maven-plugin</artifactId>
+			<version>[1.1,2)</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.eclipse.jgit</groupId>
+		    <artifactId>org.eclipse.jgit</artifactId>
+		    <version>3.6.0.201411121045-m1</version>
+		</dependency>
+
+		<!--<dependency>-->
+			<!--<groupId>org.apache.commons</groupId>-->
+			<!--<artifactId>commons-lang3</artifactId>-->
+			<!--<version>3.3.2</version>-->
+		<!--</dependency>-->
+
+		<dependency>
+			<groupId>nz.ac.auckland.composite</groupId>
+			<artifactId>composite-groovy</artifactId>
+			<version>6.3</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+<!-- 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<goalPrefix>gitlog</goalPrefix>
+				</configuration>
+				<executions>
+					<execution>
+						<id>generated-helpmojo</id>
+						<goals>
+							<goal>helpmojo</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin> -->
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+					<goalPrefix>gitlog</goalPrefix>
+				</configuration>
+				<executions>
+					<execution>
+						<id>mojo-descriptor</id>
+						<goals>
+							<goal>descriptor</goal>
+						</goals>
+					</execution>
+					<!-- if you want to generate help goal -->
+					<execution>
+						<id>generated-helpmojo</id>
+						<goals>
+							<goal>helpmojo</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+			<!--<plugin>-->
+				<!--<groupId>org.apache.maven.plugins</groupId>-->
+				<!--<artifactId>maven-dependency-plugin</artifactId>-->
+				<!--<version>2.9</version>-->
+				<!--<executions>-->
+					<!--<execution>-->
+						<!--<phase>package</phase>-->
+						<!--<goals>-->
+							<!--<goal>tree</goal>-->
+							<!--<goal>analyze-only</goal>-->
+						<!--</goals>-->
+					<!--</execution>-->
+				<!--</executions>-->
+				<!--<configuration>-->
+					<!--<failOnWarning>true</failOnWarning>-->
+					<!--<artifactItems />-->
+				<!--</configuration>-->
+			<!--</plugin>-->
+
+			<!--<plugin>-->
+				<!--<groupId>nz.ac.auckland.groupapps.plugins</groupId>-->
+				<!--<artifactId>maven-releasenote-plugin</artifactId>-->
+				<!--<version>1.1-SNAPSHOT</version>-->
+			<!--</plugin>-->
+
+		</plugins>
+	</build>
+
+	<!--<profiles>-->
+		<!--<profile>-->
+			<!--<id>gitlog</id>-->
+			<!--<build>-->
+				<!--<plugins>-->
+					<!--<plugin>-->
+					    <!--<groupId>nz.ac.auckland.groupapps.maven</groupId>-->
+					    <!--<artifactId>maven-gitlog-plugin</artifactId>-->
+					    <!--<version>1.7.0</version>-->
+					    <!--<executions>-->
+					        <!--<execution>-->
+					            <!--<goals>-->
+					                <!--<goal>generate</goal>-->
+					            <!--</goals>-->
+					        <!--</execution>-->
+					    <!--</executions>-->
+					<!--</plugin>					-->
+				<!--</plugins>-->
+			<!--</build>-->
+		<!--</profile>-->
+	<!--</profiles>-->
+
+	<scm>
+		<url>git@github.com:uoa-group-applications/maven-gitlog-plugin.git</url>
+		<connection>scm:git:git@github.com:uoa-group-applications/maven-gitlog-plugin.git</connection>
+		<developerConnection>scm:git:git@github.com:uoa-group-applications/maven-gitlog-plugin.git</developerConnection>
+	</scm>
+
+</project>
