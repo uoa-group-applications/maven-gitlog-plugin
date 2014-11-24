@@ -34,12 +34,21 @@ class ReleaseNoteMojo extends AbstractMojo {
 	void execute() throws MojoExecutionException, MojoFailureException {
 		List<RevCommit> currentRepositoryCommits = GitLogGenerator.loadGitLogs(log)
 
-		new File(project.getBuild().getOutputDirectory(), 'release-notes.txt').withWriter { Writer writer ->
+		File releaseNotes = new File(project.getBuild().getOutputDirectory(), './META-INF/release-notes.txt')
+
+		if (releaseNotes.exists()) {
+			releaseNotes.delete()
+		}
+
+		releaseNotes.withWriter { Writer writer ->
 			writer << "[release-notes] ${project.getVersion()}" << '\n'
 			currentRepositoryCommits.each { RevCommit revCommit ->
 				writer << CommitRender.render(revCommit) << '\n'
 			}
+			writer << '\n\n'
 		}
+
+		getLog().info("Generated release-notes.txt")
 
 	}
 }

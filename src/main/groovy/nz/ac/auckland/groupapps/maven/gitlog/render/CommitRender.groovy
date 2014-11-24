@@ -12,6 +12,6 @@ class CommitRender {
 	private CommitRender() {}
 
 	public static String render(RevCommit revCommit) {
-		return "${TimeRender.formatDatetime(revCommit.commitTime)} ${revCommit.shortMessage} (${revCommit.committerIdent.name} - ${revCommit.committerIdent.emailAddress})"
+		return "[${TimeRender.formatDatetime(revCommit.commitTime)}] ${revCommit.shortMessage} (${revCommit.committerIdent.name},${revCommit.committerIdent.emailAddress})"
 	}
 }
