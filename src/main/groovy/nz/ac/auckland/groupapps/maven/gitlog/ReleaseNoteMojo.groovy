@@ -10,6 +10,8 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.ResolutionScope
 
 /**
+ * @goal 'release-notes'
+ *
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
 @Mojo(
@@ -29,21 +31,21 @@ class ReleaseNoteMojo extends GitLogBaseMojo {
 
 	protected void generateReleaseNotesInText(List<CommitBundle> commitBundleList) {
 		try {
-			File releaseNote = new File(project.getBuild().getOutputDirectory(), "${META_INF_LOCATION + RELEASE_NOTES_TEXT}")
+			File releaseNote = new File(projectOutputDirectory, "${PluginConstant.META_INF_LOCATION + PluginConstant.RELEASE_NOTES_TEXT}")
 			cleanAndWriteReleaseNotes(releaseNote, commitBundleList, false)
 			getLog().info("Generating release notes into ${releaseNote.getAbsolutePath()}")
 		} catch (IOException ioe) {
-			getLog().error("Cannot generate release notes file '${RELEASE_NOTES_TEXT}'")
+			getLog().error("Cannot generate release notes file '${PluginConstant.RELEASE_NOTES_TEXT}'")
 		}
 	}
 
 	protected void generateReleaseNotesInJson(List<CommitBundle> commitBundleList) {
 		try {
-			File releaseNote = new File(project.getBuild().getOutputDirectory(), "${META_INF_LOCATION + RELEASE_NOTES_JSON}")
+			File releaseNote = new File(projectOutputDirectory, "${PluginConstant.META_INF_LOCATION + PluginConstant.RELEASE_NOTES_JSON}")
 			cleanAndWriteReleaseNotes(releaseNote, commitBundleList, true)
 			getLog().info("Parsing release notes into ${releaseNote.getAbsolutePath()}")
 		} catch (IOException ioe) {
-			getLog().error("Cannot generate release notes file '${RELEASE_NOTES_JSON}'")
+			getLog().error("Cannot generate release notes file '${PluginConstant.RELEASE_NOTES_JSON}'")
 		}
 	}
 

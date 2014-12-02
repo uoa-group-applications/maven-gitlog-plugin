@@ -18,6 +18,13 @@ public class GitLogGenerator {
 
 	private GitLogGenerator() {}
 
+	/**
+	 * Generate a release note under current repository
+	 *
+	 * @param project is the current project
+	 * @param issuePrefix is the issuePrefix config with the plugin
+	 * @param log is the Logger
+	 */
 	public static List<CommitBundle> generate(MavenProject project, String issuePrefix, Log log) {
 
 		List<CommitBundle> allCommits = []
@@ -35,7 +42,6 @@ public class GitLogGenerator {
 
 			String versionNumber = project.getVersion()
 			boolean isReleased = false
-
 
 			while (logIterator.hasNext()) {
 				RevCommit revCommit = (RevCommit) logIterator.next()
@@ -62,6 +68,9 @@ public class GitLogGenerator {
 		return allCommits
 	}
 
+	/**
+	 * @return current repository build
+	 */
 	protected static Repository buildRepository() {
 		return new RepositoryBuilder().findGitDir().build()
 	}

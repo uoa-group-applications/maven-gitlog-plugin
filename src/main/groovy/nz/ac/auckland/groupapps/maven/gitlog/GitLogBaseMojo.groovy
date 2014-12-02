@@ -20,14 +20,15 @@ public abstract class GitLogBaseMojo extends AbstractMojo {
 	@Parameter(required = false, property = 'issuePrefix')
 	protected String issuePrefix = null
 
-	protected static final String RELEASE_NOTES_TEXT = 'release_notes.txt'
-
-	protected static final String RELEASE_NOTES_JSON = 'release_notes.json'
-
-	protected static final META_INF_LOCATION = './META-INF/'
-
 	protected void logProperties() {
 		getLog().info("Current artifact version is ${project.getVersion()}, [deployed=${deployedArtifact}], [issuePrefix=${issuePrefix}]")
+	}
+
+	/**
+	 * @return the output directory of project
+	 */
+	protected String getProjectOutputDirectory() {
+		return project.getBuild().getOutputDirectory()
 	}
 
 }
