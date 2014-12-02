@@ -15,8 +15,12 @@ class TimeRender {
 
 	private final static DateFormat DATE_FORMAT = new SimpleDateFormat(DEFAULT_FORMAT)
 
-	public static String formatDatetime(int timeStamp) {
+	public static String formatTimestamp(int timeStamp) {
 		return DATE_FORMAT.format(new Date(timeStamp * 1000L))
+	}
+
+	public static String formatDate(Date date) {
+		return DATE_FORMAT.format(date)
 	}
 
 }

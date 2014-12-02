@@ -41,11 +41,11 @@
 		    <version>3.6.0.201411121045-m1</version>
 		</dependency>
 
-		<!--<dependency>-->
-			<!--<groupId>org.apache.commons</groupId>-->
-			<!--<artifactId>commons-lang3</artifactId>-->
-			<!--<version>3.3.2</version>-->
-		<!--</dependency>-->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
+		</dependency>
 
 		<!-- we use the ResourceCollection stuff -->
 		<dependency>
@@ -57,30 +57,13 @@
 		<dependency>
 			<groupId>nz.ac.auckland.composite</groupId>
 			<artifactId>composite-groovy</artifactId>
-			<version>6.3</version>
+			<version>[6.4,7)</version>
 		</dependency>
 
 	</dependencies>
 
 	<build>
 		<plugins>
-<!-- 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-plugin-plugin</artifactId>
-				<version>2.5.1</version>
-				<configuration>
-					<goalPrefix>gitlog</goalPrefix>
-				</configuration>
-				<executions>
-					<execution>
-						<id>generated-helpmojo</id>
-						<goals>
-							<goal>helpmojo</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin> -->
-
 
 			<plugin>
 				<artifactId>maven-plugin-plugin</artifactId>
@@ -88,21 +71,21 @@
 					<skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
 					<goalPrefix>gitlog</goalPrefix>
 				</configuration>
-				<executions>
-					<execution>
-						<id>mojo-descriptor</id>
-						<goals>
-							<goal>descriptor</goal>
-						</goals>
-					</execution>
-					<!-- if you want to generate help goal -->
-					<execution>
-						<id>generated-helpmojo</id>
-						<goals>
-							<goal>helpmojo</goal>
-						</goals>
-					</execution>
-				</executions>
+				<!--<executions>-->
+					<!--<execution>-->
+						<!--<id>mojo-descriptor</id>-->
+						<!--<goals>-->
+							<!--<goal>descriptor</goal>-->
+						<!--</goals>-->
+					<!--</execution>-->
+					<!--&lt;!&ndash; if you want to generate help goal &ndash;&gt;-->
+					<!--<execution>-->
+						<!--<id>generated-helpmojo</id>-->
+						<!--<goals>-->
+							<!--<goal>helpmojo</goal>-->
+						<!--</goals>-->
+					<!--</execution>-->
+				<!--</executions>-->
 			</plugin>
 
 			<!--<plugin>-->

@@ -1,54 +1,74 @@
 package nz.ac.auckland.groupapps.maven.gitlog
 
-import groovy.transform.CompileStatic
+import groovy.json.JsonBuilder
+import nz.ac.auckland.groupapps.maven.gitlog.git.CommitBundle
 import nz.ac.auckland.groupapps.maven.gitlog.render.CommitRender
-import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
 import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
-import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
-import org.apache.maven.project.MavenProject
-import org.eclipse.jgit.revwalk.RevCommit
 
 /**
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
 @Mojo(
-		name='compile',
+		name = 'release-notes',
 		requiresProject = true,
 		requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME,
-		defaultPhase = LifecyclePhase.GENERATE_RESOURCES
+		defaultPhase = LifecyclePhase.PREPARE_PACKAGE
 )
-@CompileStatic
-class ReleaseNoteMojo extends AbstractMojo {
-
-	@Parameter(required = true, readonly = true, property = "project")
-	protected MavenProject project
-
-	@Parameter(required = true, defaultValue = 'false')
-	protected boolean deployedArtifact
+class ReleaseNoteMojo extends GitLogBaseMojo {
 
 	@Override
 	void execute() throws MojoExecutionException, MojoFailureException {
-		List<RevCommit> currentRepositoryCommits = GitLogGenerator.loadGitLogs(log)
+		List<CommitBundle> currentRepositoryCommits = GitLogGenerator.generate(project, issuePrefix, getLog())
+		generateReleaseNotesInText(currentRepositoryCommits)
+		generateReleaseNotesInJson(currentRepositoryCommits)
+	}
 
-		File releaseNotes = new File(project.getBuild().getOutputDirectory(), './META-INF/release-notes.txt')
+	protected void generateReleaseNotesInText(List<CommitBundle> commitBundleList) {
+		try {
+			File releaseNote = new File(project.getBuild().getOutputDirectory(), "${META_INF_LOCATION + RELEASE_NOTES_TEXT}")
+			cleanAndWriteReleaseNotes(releaseNote, commitBundleList, false)
+			getLog().info("Generating release notes into ${releaseNote.getAbsolutePath()}")
+		} catch (IOException ioe) {
+			getLog().error("Cannot generate release notes file '${RELEASE_NOTES_TEXT}'")
+		}
+	}
 
+	protected void generateReleaseNotesInJson(List<CommitBundle> commitBundleList) {
+		try {
+			File releaseNote = new File(project.getBuild().getOutputDirectory(), "${META_INF_LOCATION + RELEASE_NOTES_JSON}")
+			cleanAndWriteReleaseNotes(releaseNote, commitBundleList, true)
+			getLog().info("Parsing release notes into ${releaseNote.getAbsolutePath()}")
+		} catch (IOException ioe) {
+			getLog().error("Cannot generate release notes file '${RELEASE_NOTES_JSON}'")
+		}
+	}
+
+	/**
+	 *
+	 * @param file
+	 * @param isJsonFormat
+	 */
+	public void cleanAndWriteReleaseNotes(File releaseNotes, List<CommitBundle> commitBundleList, boolean isJsonFormat) {
 		if (releaseNotes.exists()) {
 			releaseNotes.delete()
 		}
 
-		releaseNotes.withWriter { Writer writer ->
-			writer << "[release-notes] ${project.getVersion()}" << '\n'
-			currentRepositoryCommits.each { RevCommit revCommit ->
-				writer << CommitRender.render(revCommit) << '\n'
+		if (isJsonFormat) {
+			releaseNotes.withWriter { Writer writer ->
+				writer << new JsonBuilder(commitBundleList).toPrettyString()
 			}
-			writer << '\n\n'
+		} else {
+			releaseNotes.withWriter { Writer writer ->
+				commitBundleList.each { CommitBundle revCommit ->
+					writer << CommitRender.render(revCommit) << '\n'
+				}
+				writer << '\n\n'
+			}
 		}
-
-		getLog().info("Generated release-notes.txt")
-
 	}
+
 }

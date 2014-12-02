@@ -1,20 +1,11 @@
 package nz.ac.auckland.groupapps.maven.gitlog
 
 import groovy.transform.CompileStatic
+import nz.ac.auckland.groupapps.maven.gitlog.git.CommitBundle
 import nz.ac.auckland.groupapps.maven.gitlog.render.MavenLoggerRender
-import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
-import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugins.annotations.Mojo
-import org.apache.maven.plugins.annotations.Parameter
-import org.apache.maven.project.MavenProject
-import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.api.errors.NoHeadException
-import org.eclipse.jgit.lib.Repository
-import org.eclipse.jgit.lib.RepositoryBuilder
-import org.eclipse.jgit.revwalk.RevCommit
-import org.eclipse.jgit.revwalk.RevWalk
 
 /**
  * @goal show
@@ -23,25 +14,18 @@ import org.eclipse.jgit.revwalk.RevWalk
  */
 @CompileStatic
 @Mojo(name = 'show')
-public class ShowMojo extends AbstractMojo {
-
-	@Parameter(required = true, readonly = true, property = "project")
-	protected MavenProject project
-
-	private final Log log
-
-	public ShowMojo() {
-		log = getLog()
-	}
+public class ShowMojo extends GitLogBaseMojo {
 
 	@Override
 	void execute() throws MojoExecutionException, MojoFailureException {
+		logProperties()
 
 		if (PluginConstant.IGNORE_PACKAGING_TYPE.contains(project.packaging?.toLowerCase())) {
+			getLog().info('Current artifact type is not supported')
 			return
 		}
 
-		List<RevCommit> allCommits = GitLogGenerator.loadGitLogs(log)
+		List<CommitBundle> allCommits = GitLogGenerator.generate(project, issuePrefix, getLog())
 
 		MavenLoggerRender mavenLoggerRender = new MavenLoggerRender(allCommits, log)
 		mavenLoggerRender.render()

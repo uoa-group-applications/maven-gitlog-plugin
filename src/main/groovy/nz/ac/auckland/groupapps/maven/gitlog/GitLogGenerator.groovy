@@ -1,7 +1,9 @@
 package nz.ac.auckland.groupapps.maven.gitlog
 
-import groovy.transform.CompileStatic
+import nz.ac.auckland.groupapps.maven.gitlog.git.CommitBundle
+import nz.ac.auckland.groupapps.maven.gitlog.utils.CommitUtils
 import org.apache.maven.plugin.logging.Log
+import org.apache.maven.project.MavenProject
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.NoHeadException
 import org.eclipse.jgit.lib.Repository
@@ -16,8 +18,11 @@ public class GitLogGenerator {
 
 	private GitLogGenerator() {}
 
-	public static List<RevCommit> loadGitLogs(Log log) {
-		List<RevCommit> allCommits = []
+	public static List<CommitBundle> generate(MavenProject project, String issuePrefix, Log log) {
+
+		List<CommitBundle> allCommits = []
+
+		CommitUtils commitUtils = new CommitUtils(issuePrefix, project)
 
 		try {
 			Repository repository = buildRepository()
@@ -26,10 +31,27 @@ public class GitLogGenerator {
 
 			Iterator<RevCommit> logIterator = logs.iterator()
 
+			List<CommitBundle> currentReleaseCommits = []
+
+			String versionNumber = project.getVersion()
+			boolean isReleased = false
+
+
 			while (logIterator.hasNext()) {
 				RevCommit revCommit = (RevCommit) logIterator.next()
-				allCommits.add(0, revCommit)
+
+				if (commitUtils.isReleaseCommit(revCommit)) {
+					isReleased = true
+					versionNumber = commitUtils.fetchReleaseVersionNumber(revCommit)
+					allCommits.addAll(currentReleaseCommits)
+					currentReleaseCommits.clear()
+				} else if (commitUtils.isIssueRelated(revCommit)) {
+					currentReleaseCommits.add(commitUtils.convertToBundle(revCommit, isReleased, versionNumber))
+				}
+
 			}
+
+			allCommits.addAll(currentReleaseCommits)
 
 		} catch (IllegalArgumentException iae) {
 			log.error("No Git repository be found")

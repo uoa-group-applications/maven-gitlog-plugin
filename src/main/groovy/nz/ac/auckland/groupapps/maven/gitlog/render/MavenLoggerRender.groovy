@@ -1,9 +1,9 @@
 package nz.ac.auckland.groupapps.maven.gitlog.render
 
 import groovy.transform.CompileStatic
+import nz.ac.auckland.groupapps.maven.gitlog.git.CommitBundle
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.logging.SystemStreamLog
-import org.eclipse.jgit.revwalk.RevCommit
 
 /**
  *
@@ -12,11 +12,11 @@ import org.eclipse.jgit.revwalk.RevCommit
 @CompileStatic
 class MavenLoggerRender {
 
-	private final List<RevCommit> revCommitList
+	private final List<CommitBundle> revCommitList
 
 	private final Log log
 
-	public MavenLoggerRender(List<RevCommit> commitList, Log log) {
+	public MavenLoggerRender(List<CommitBundle> commitList, Log log) {
 		if (!log) {
 			log = new SystemStreamLog()
 		}
@@ -32,7 +32,7 @@ class MavenLoggerRender {
 		log.info('=============================================================')
 	}
 
-	protected void renderCommit(RevCommit commit) {
+	protected void renderCommit(CommitBundle commit) {
 		log.info(CommitRender.render(commit))
 	}
 
@@ -40,7 +40,7 @@ class MavenLoggerRender {
 		renderSeparator()
 		renderEmptyLine()
 
-		revCommitList.each { RevCommit revCommit ->
+		revCommitList.each { CommitBundle revCommit ->
 			renderCommit(revCommit)
 		}
 
