@@ -1,7 +1,9 @@
-package nz.ac.auckland.groupapps.maven.gitlog
+package nz.ac.auckland.groupapps.maven.gitlog.git
 
-import nz.ac.auckland.groupapps.maven.gitlog.git.CommitBundle
-import nz.ac.auckland.groupapps.maven.gitlog.utils.CommitUtils
+import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitBundle
+import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitHelper
+import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitUtils
+import nz.ac.auckland.groupapps.maven.gitlog.utils.VersionFetcher
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
 import org.eclipse.jgit.api.Git
@@ -46,9 +48,11 @@ public class GitLogGenerator {
 			while (logIterator.hasNext()) {
 				RevCommit revCommit = (RevCommit) logIterator.next()
 
-				if (commitUtils.isReleaseCommit(revCommit)) {
+				if (CommitHelper.isReleaseCommit(revCommit)) {
 					isReleased = true
-					versionNumber = commitUtils.fetchReleaseVersionNumber(revCommit)
+					versionNumber = VersionFetcher.fetchReleaseVersionNumber(project, revCommit)
+
+					currentReleaseCommits.add(commitUtils.convertToBundle(revCommit, isReleased, versionNumber, true))
 					allCommits.addAll(currentReleaseCommits)
 					currentReleaseCommits.clear()
 				} else if (commitUtils.isIssueRelated(revCommit)) {

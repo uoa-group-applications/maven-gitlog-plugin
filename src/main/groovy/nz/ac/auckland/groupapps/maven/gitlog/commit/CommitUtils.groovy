@@ -1,6 +1,7 @@
-package nz.ac.auckland.groupapps.maven.gitlog.utils
+package nz.ac.auckland.groupapps.maven.gitlog.commit
 
-import nz.ac.auckland.groupapps.maven.gitlog.git.CommitBundle
+import nz.ac.auckland.groupapps.maven.gitlog.PluginConstant
+import nz.ac.auckland.groupapps.maven.gitlog.utils.IssueFetcher
 import org.apache.commons.lang3.StringUtils
 import org.apache.maven.project.MavenProject
 import org.eclipse.jgit.revwalk.RevCommit
@@ -9,17 +10,6 @@ import org.eclipse.jgit.revwalk.RevCommit
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
 public class CommitUtils {
-
-	/**
-	 * The separator in plugin configuration.
-	 */
-	public static final String ISSUE_PREFIX_SEPARATOR = ','
-
-	/**
-	 * Default commit message by maven release plugin
-	 * e.g. [maven-release-plugin] prepare release dam-domain-1.5
-	 */
-	public static final String DEFAULT_RELEASE_PATTERN = '[maven-release-plugin] prepare release'
 
 	protected List<String> issuePrefixList = []
 
@@ -30,7 +20,7 @@ public class CommitUtils {
 
 	public CommitUtils(String issuePrefix, MavenProject project) {
 		List<String> prefixList = []
-		if (issuePrefix?.contains(ISSUE_PREFIX_SEPARATOR)) {
+		if (issuePrefix?.contains(PluginConstant.ISSUE_PREFIX_SEPARATOR)) {
 			prefixList = issuePrefix.tokenize(',')
 		}
 		prefixList?.each { String prefix ->
@@ -53,26 +43,6 @@ public class CommitUtils {
 	}
 
 	/**
-	 * Verify whether the passing commit is a release commit
-	 *
-	 * @param revCommit is the commit record
-	 * @return true if the commit message contains maven release message
-	 */
-	public boolean isReleaseCommit(RevCommit revCommit) {
-		return revCommit?.shortMessage?.startsWith(DEFAULT_RELEASE_PATTERN)
-	}
-
-	/**
-	 * fetch the release version number from the commit message
-	 *
-	 * @param revCommit is the commit record
-	 * @return the version number in the commit message
-	 */
-	public String fetchReleaseVersionNumber(RevCommit revCommit) {
-		return revCommit.shortMessage.replace(DEFAULT_RELEASE_PATTERN, '').replace(project.getArtifactId(), '').trim().substring(1)
-	}
-
-	/**
 	 * Convert RevCommit to CommitBundle object
 	 *
 	 * @param revCommit is the commit record
@@ -81,6 +51,20 @@ public class CommitUtils {
 	 * @return the commit bundle object
 	 */
 	public CommitBundle convertToBundle(RevCommit revCommit, boolean isReleased, String versionNumber) {
+		return convertToBundle(revCommit, isReleased, versionNumber, false)
+
+	}
+
+	/**
+	 * Convert RevCommit to CommitBundle object
+	 *
+	 * @param revCommit is the commit record
+	 * @param isReleased is the flag that current commit be released or not.
+	 * @param versionNumber is the release version number
+	 * @param isReleaseCommit is the flag whether current commit is a release commit
+	 * @return the commit bundle object
+	 */
+	public CommitBundle convertToBundle(RevCommit revCommit, boolean isReleased, String versionNumber, boolean isReleaseCommit) {
 		CommitBundle commitBundle = new CommitBundle()
 
 		commitBundle.released = isReleased

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -14,10 +15,10 @@
 	<packaging>maven-plugin</packaging>
 	<name>Maven Git Log Plugin</name>
 	<description>
-		Generates a release note based on commits to a git repository in text format 
+		Generates a release note based on commits to a git repository in text format
 		showing the changes that are included in each version.
 
-		A possible use of this is to push these changelogs to a remote server when 
+		A possible use of this is to push these changelogs to a remote server when
 		releasing the maven project so that the remote server can lookup and update
 		JIRA ticket based on an accurate list of commits that the current package includes.
 	</description>
@@ -36,15 +37,21 @@
 		</dependency>
 
 		<dependency>
-		    <groupId>org.eclipse.jgit</groupId>
-		    <artifactId>org.eclipse.jgit</artifactId>
-		    <version>3.6.0.201411121045-m1</version>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>3.6.0.201411121045-m1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.0</version>
 		</dependency>
 
 		<!-- we use the ResourceCollection stuff -->
@@ -60,6 +67,13 @@
 			<version>[6.4,7)</version>
 		</dependency>
 
+		<dependency>
+			<groupId>nz.ac.auckland.composite</groupId>
+			<artifactId>composite-unittest</artifactId>
+			<version>[2.4,)</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -72,89 +86,89 @@
 					<goalPrefix>gitlog</goalPrefix>
 				</configuration>
 				<!--<executions>-->
-					<!--<execution>-->
-						<!--<id>mojo-descriptor</id>-->
-						<!--<goals>-->
-							<!--<goal>descriptor</goal>-->
-						<!--</goals>-->
-					<!--</execution>-->
-					<!--&lt;!&ndash; if you want to generate help goal &ndash;&gt;-->
-					<!--<execution>-->
-						<!--<id>generated-helpmojo</id>-->
-						<!--<goals>-->
-							<!--<goal>helpmojo</goal>-->
-						<!--</goals>-->
-					<!--</execution>-->
+				<!--<execution>-->
+				<!--<id>mojo-descriptor</id>-->
+				<!--<goals>-->
+				<!--<goal>descriptor</goal>-->
+				<!--</goals>-->
+				<!--</execution>-->
+				<!--&lt;!&ndash; if you want to generate help goal &ndash;&gt;-->
+				<!--<execution>-->
+				<!--<id>generated-helpmojo</id>-->
+				<!--<goals>-->
+				<!--<goal>helpmojo</goal>-->
+				<!--</goals>-->
+				<!--</execution>-->
 				<!--</executions>-->
 			</plugin>
 
 			<!--<plugin>-->
-				<!--<groupId>org.apache.maven.plugins</groupId>-->
-				<!--<artifactId>maven-compiler-plugin</artifactId>-->
-				<!--<version>3.2</version>-->
-				<!--<configuration>-->
-					<!--<source>1.7</source>-->
-					<!--<target>1.7</target>-->
-				<!--</configuration>-->
+			<!--<groupId>org.apache.maven.plugins</groupId>-->
+			<!--<artifactId>maven-compiler-plugin</artifactId>-->
+			<!--<version>3.2</version>-->
+			<!--<configuration>-->
+			<!--<source>1.7</source>-->
+			<!--<target>1.7</target>-->
+			<!--</configuration>-->
 			<!--</plugin>-->
 
 			<!--<plugin>-->
-				<!--<groupId>org.apache.maven.plugins</groupId>-->
-				<!--<artifactId>maven-dependency-plugin</artifactId>-->
-				<!--<version>2.9</version>-->
-				<!--<executions>-->
-					<!--<execution>-->
-						<!--<phase>package</phase>-->
-						<!--<goals>-->
-							<!--<goal>tree</goal>-->
-							<!--<goal>analyze-only</goal>-->
-						<!--</goals>-->
-					<!--</execution>-->
-				<!--</executions>-->
-				<!--<configuration>-->
-					<!--<failOnWarning>true</failOnWarning>-->
-					<!--<artifactItems />-->
-				<!--</configuration>-->
+			<!--<groupId>org.apache.maven.plugins</groupId>-->
+			<!--<artifactId>maven-dependency-plugin</artifactId>-->
+			<!--<version>2.9</version>-->
+			<!--<executions>-->
+			<!--<execution>-->
+			<!--<phase>package</phase>-->
+			<!--<goals>-->
+			<!--<goal>tree</goal>-->
+			<!--<goal>analyze-only</goal>-->
+			<!--</goals>-->
+			<!--</execution>-->
+			<!--</executions>-->
+			<!--<configuration>-->
+			<!--<failOnWarning>true</failOnWarning>-->
+			<!--<artifactItems />-->
+			<!--</configuration>-->
 			<!--</plugin>-->
 
 			<!--<plugin>-->
-				<!--<groupId>nz.ac.auckland.groupapps.maven</groupId>-->
-				<!--<artifactId>maven-gitlog-plugin</artifactId>-->
-				<!--<version>1.1-SNAPSHOT</version>-->
-				<!--<executions>-->
-					<!--<execution>-->
-						<!--<id>build-release-notes</id>-->
-						<!--<phase>generate-resources</phase>-->
-						<!--<goals>-->
-							<!--<goal>compile</goal>-->
-						<!--</goals>-->
-					<!--</execution>-->
-				<!--</executions>-->
+			<!--<groupId>nz.ac.auckland.groupapps.maven</groupId>-->
+			<!--<artifactId>maven-gitlog-plugin</artifactId>-->
+			<!--<version>1.1-SNAPSHOT</version>-->
+			<!--<executions>-->
+			<!--<execution>-->
+			<!--<id>build-release-notes</id>-->
+			<!--<phase>generate-resources</phase>-->
+			<!--<goals>-->
+			<!--<goal>compile</goal>-->
+			<!--</goals>-->
+			<!--</execution>-->
+			<!--</executions>-->
 			<!--</plugin>-->
 
 		</plugins>
 	</build>
 
 	<!--<profiles>-->
-		<!--<profile>-->
-			<!--<id>gitlog</id>-->
-			<!--<build>-->
-				<!--<plugins>-->
-					<!--<plugin>-->
-					    <!--<groupId>nz.ac.auckland.groupapps.maven</groupId>-->
-					    <!--<artifactId>maven-gitlog-plugin</artifactId>-->
-					    <!--<version>1.7.0</version>-->
-					    <!--<executions>-->
-					        <!--<execution>-->
-					            <!--<goals>-->
-					                <!--<goal>generate</goal>-->
-					            <!--</goals>-->
-					        <!--</execution>-->
-					    <!--</executions>-->
-					<!--</plugin>					-->
-				<!--</plugins>-->
-			<!--</build>-->
-		<!--</profile>-->
+	<!--<profile>-->
+	<!--<id>gitlog</id>-->
+	<!--<build>-->
+	<!--<plugins>-->
+	<!--<plugin>-->
+	<!--<groupId>nz.ac.auckland.groupapps.maven</groupId>-->
+	<!--<artifactId>maven-gitlog-plugin</artifactId>-->
+	<!--<version>1.7.0</version>-->
+	<!--<executions>-->
+	<!--<execution>-->
+	<!--<goals>-->
+	<!--<goal>generate</goal>-->
+	<!--</goals>-->
+	<!--</execution>-->
+	<!--</executions>-->
+	<!--</plugin>					-->
+	<!--</plugins>-->
+	<!--</build>-->
+	<!--</profile>-->
 	<!--</profiles>-->
 
 	<scm>

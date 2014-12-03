@@ -1,48 +1,84 @@
 package nz.ac.auckland.groupapps.maven.gitlog.utils
 
+import groovy.json.JsonSlurper
+import nz.ac.auckland.groupapps.maven.gitlog.PluginConstant
+import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitBundle
 import org.apache.maven.artifact.Artifact
+import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
+import org.eclipse.jetty.util.resource.JarFileResource
 import org.eclipse.jetty.util.resource.Resource
-import org.eclipse.jetty.util.resource.ResourceCollection
 
 /**
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
 class DependencyResourceHelper {
 
-	private DependencyResourceHelper() {
+	MavenProject project
+
+	Log log
+
+	List<CommitBundle> dependencyResourceCommits = new ArrayList<>()
+
+	public DependencyResourceHelper(MavenProject project, Log log) {
+		this.project = project
+		this.log = log
 	}
 
-	public findDependencyResourcesByProject(MavenProject project) {
-		List<Artifact> runtimeArtifacts = (List<Artifact>) project.getRuntimeArtifacts()
-		List<Resource> foundResources = []
+	protected List<Resource> findDependencyResources(String groupIdPrefix) {
 
-		File ourResources = new File(project.basedir, "src/main/resources/META-INF/resources")
+		Set<Artifact> runtimeArtifacts = (Set<Artifact>) project.getDependencyArtifacts()
+		List<Resource> foundResource = []
 
-		if (ourResources.exists()) {
-			foundResources.add(Resource.newResource(ourResources))
+		if (groupIdPrefix) {
+			runtimeArtifacts.removeAll { Artifact artifact ->
+				return artifact.getGroupId().toUpperCase().trim().startsWith(groupIdPrefix.toUpperCase().trim())
+			}
 		}
 
 		runtimeArtifacts.each { Artifact artifact ->
 			Resource resource = dependencyIsResource(artifact)
 
 			if (resource) {
-				foundResources.add(resource)
+				foundResource.add(resource)
+				log.info("Found ${artifact} contains release notes")
 			}
 		}
 
-		if (foundResources.size() > 0) {
-			Resource[] resources = new Resource[foundResources.size()]
-			return new ResourceCollection(foundResources.toArray(resources))
-		} else {
-			return null
+		if (foundResource.size() > 0) {
+			return foundResource
+		}
+
+		return null
+
+	}
+
+	public void processReleaseNotes(String groupIdPrefix) {
+		List<JarFileResource> resources = findDependencyResources(groupIdPrefix)
+		if (resources) {
+			discoverMatchingResources(resources)
+		}
+		log.info("There are ${dependencyResourceCommits.size()} release notes totally")
+	}
+
+	protected void discoverMatchingResources(Collection<Resource> resources) {
+		resources.each { Resource resource ->
+			String name = resource.name
+
+			if (name.indexOf('META-INF/release_notes.json') > 0) {
+				List<CommitBundle> resourceReleaseNotes  = new JsonSlurper().parse(resource.inputStream)
+				log.info("Found ${resourceReleaseNotes.size()} release notes in ${resource.name}")
+				dependencyResourceCommits.addAll(resourceReleaseNotes)
+			}
 		}
 	}
 
 	protected Resource dependencyIsResource(Artifact artifact) {
-		if (artifact.type != "jar") { return null }
+		if (!PluginConstant.VALID_PACKAGE_TYPE.contains(artifact.type.toLowerCase())) {
+			return null
+		}
 
-		Resource resource = Resource.newResource("jar:file:${artifact.file.absolutePath}!/META-INF/resources")
+		Resource resource = Resource.newResource("jar:file:${artifact.file.absolutePath}!/META-INF/release_notes.json")
 
 		if (resource && resource.exists()) {
 			return resource

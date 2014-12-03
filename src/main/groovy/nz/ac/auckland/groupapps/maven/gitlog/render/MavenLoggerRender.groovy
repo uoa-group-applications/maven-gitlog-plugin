@@ -1,7 +1,7 @@
 package nz.ac.auckland.groupapps.maven.gitlog.render
 
 import groovy.transform.CompileStatic
-import nz.ac.auckland.groupapps.maven.gitlog.git.CommitBundle
+import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitBundle
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.plugin.logging.SystemStreamLog
 
@@ -41,7 +41,9 @@ class MavenLoggerRender {
 		renderEmptyLine()
 
 		revCommitList.each { CommitBundle revCommit ->
-			renderCommit(revCommit)
+//			if (!revCommit.releaseCommit) {
+				renderCommit(revCommit)
+//			}
 		}
 
 		renderEmptyLine()

@@ -1,8 +1,11 @@
 package nz.ac.auckland.groupapps.maven.gitlog
 
 import groovy.json.JsonBuilder
-import nz.ac.auckland.groupapps.maven.gitlog.git.CommitBundle
+import nz.ac.auckland.groupapps.maven.gitlog.mojo.GitLogBaseMojo
+import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitBundle
+import nz.ac.auckland.groupapps.maven.gitlog.git.GitLogGenerator
 import nz.ac.auckland.groupapps.maven.gitlog.render.CommitRender
+import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitMerger
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
 import org.apache.maven.plugins.annotations.LifecyclePhase
@@ -24,9 +27,14 @@ class ReleaseNoteMojo extends GitLogBaseMojo {
 
 	@Override
 	void execute() throws MojoExecutionException, MojoFailureException {
-		List<CommitBundle> currentRepositoryCommits = GitLogGenerator.generate(project, issuePrefix, getLog())
-		generateReleaseNotesInText(currentRepositoryCommits)
-		generateReleaseNotesInJson(currentRepositoryCommits)
+		List<CommitBundle> allReleaseNotes = GitLogGenerator.generate(project, issuePrefix, getLog())
+
+		if (deployedArtifact) {
+			allReleaseNotes = CommitMerger.mergeForProject(project, allReleaseNotes, fetchDependencyReleaseNotes())
+		}
+
+		generateReleaseNotesInText(allReleaseNotes)
+		generateReleaseNotesInJson(allReleaseNotes)
 	}
 
 	protected void generateReleaseNotesInText(List<CommitBundle> commitBundleList) {
@@ -50,13 +58,21 @@ class ReleaseNoteMojo extends GitLogBaseMojo {
 	}
 
 	/**
+	 * Write all commits into the release note
 	 *
-	 * @param file
-	 * @param isJsonFormat
+	 * @param file is the target file
+	 * @param isJsonFormat is the flag whether the content be formatted in JSON
 	 */
 	public void cleanAndWriteReleaseNotes(File releaseNotes, List<CommitBundle> commitBundleList, boolean isJsonFormat) {
 		if (releaseNotes.exists()) {
 			releaseNotes.delete()
+		}
+
+		/**
+		 * Remove all release commit from release notes
+		 */
+		commitBundleList.removeAll { CommitBundle commitBundle ->
+			return commitBundle.releaseCommit
 		}
 
 		if (isJsonFormat) {

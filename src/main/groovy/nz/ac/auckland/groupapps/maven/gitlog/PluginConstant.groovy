@@ -18,4 +18,20 @@ public class PluginConstant {
 
 	public static final META_INF_LOCATION = './META-INF/'
 
+	public static final List<String> VALID_PACKAGE_TYPE = ['jar', 'war', 'bathe-war']
+
+
+	/**
+	 * The separator in plugin configuration.
+	 */
+	public static final String ISSUE_PREFIX_SEPARATOR = ','
+
+	/**
+	 * Default commit message by maven release plugin
+	 * e.g. [maven-release-plugin] prepare release dam-domain-1.5
+	 */
+	public static final String DEFAULT_RELEASE_PATTERN = '[maven-release-plugin] prepare release'
+
+	public static final String SNAPSHOT_PATTERN='-SNAPSHOT'
+
 }

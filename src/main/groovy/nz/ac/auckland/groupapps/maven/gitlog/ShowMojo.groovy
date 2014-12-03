@@ -1,7 +1,9 @@
 package nz.ac.auckland.groupapps.maven.gitlog
 
 import groovy.transform.CompileStatic
-import nz.ac.auckland.groupapps.maven.gitlog.git.CommitBundle
+import nz.ac.auckland.groupapps.maven.gitlog.mojo.GitLogBaseMojo
+import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitBundle
+import nz.ac.auckland.groupapps.maven.gitlog.git.GitLogGenerator
 import nz.ac.auckland.groupapps.maven.gitlog.render.MavenLoggerRender
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
