@@ -2,9 +2,8 @@ Maven GitLog Plugin
 ===================
 ### This plugin aims to enhance Kanban Flow across multiple teams in UOA.
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/nz.ac.auckland.groupapps.maven/maven-gitlog-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/nz.ac.auckland.groupapps.maven/maven-gitlog-plugin) 
-[![Build Status](https://travis-ci.org/uoa-group-applications/maven-gitlog-plugin.svg?branch=master)](https://travis-ci.org/uoa-group-applications/maven-gitlog-plugin)
-[![Coverage Status](https://coveralls.io/repos/uoa-group-applications/maven-gitlog-plugin.svg?branch=master)](https://coveralls.io/r/uoa-group-applications/maven-gitlog-plugin?branch=master)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/nz.ac.auckland.groupapps.maven/maven-gitlog-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/nz.ac.auckland.groupapps.maven/maven-gitlog-plugin) [![Build Status](https://travis-ci.org/uoa-group-applications/maven-gitlog-plugin.svg?branch=master)](https://travis-ci.org/uoa-group-applications/maven-gitlog-plugin)
+[![Coverage Status](https://coveralls.io/repos/uoa-group-applications/maven-gitlog-plugin/badge.png)](https://coveralls.io/r/uoa-group-applications/maven-gitlog-plugin)
 [![Code Climate](https://codeclimate.com/github/uoa-group-applications/maven-gitlog-plugin/badges/gpa.svg)](https://codeclimate.com/github/uoa-group-applications/maven-gitlog-plugin)
 [![Test Coverage](https://codeclimate.com/github/uoa-group-applications/maven-gitlog-plugin/badges/coverage.svg)](https://codeclimate.com/github/uoa-group-applications/maven-gitlog-plugin)
 
