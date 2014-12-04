@@ -1,13 +1,7 @@
 language: groovy
 jdk:
 - oraclejdk8
-addons:
-  code_climate:
-    repo_token:
-      secure: "tjw2EGJ9pj4Kt9/gUeNKbFoD4anvyIbvjF6bQCCPcOoEY5gQIGHVqjjms2w8H7WCpNRrxyP3WeOQgehqVTd6h7Mp7iEG2hLyCza4IyfusjHldcIp8rpcVv6+zY3Tr+Vo+CqjO3P8bTz6UfIJ+M5qQOoa8Pg8LW+3CDp2KuWfF+0="
 before_install:
 - unset GEM_PATH
-before_script:
-- mvn -e -Ptest-integration test
 after_success:
 - mvn jacoco:report coveralls:report
