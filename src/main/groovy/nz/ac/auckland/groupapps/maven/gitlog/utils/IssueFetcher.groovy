@@ -22,11 +22,11 @@ public class IssueFetcher {
 		if (issuePrefixList?.size() > 0) {
 			issuePrefixList.each { String issuePrefix ->
 				if (!issueNumber) {
-					issueNumber = shortMessage.toUpperCase().find(issuePrefix + DEFAULT_ISSUE_NUMBER_PATTERN)
+					issueNumber = shortMessage.trim().toUpperCase().find(issuePrefix.trim().toUpperCase() + DEFAULT_ISSUE_NUMBER_PATTERN)
 				}
 			}
 		} else {
-			issueNumber = shortMessage.toUpperCase().find(DEFAULT_ISSUE_PREFIX_PATTERN + DEFAULT_ISSUE_NUMBER_PATTERN)
+			issueNumber = shortMessage.trim().toUpperCase().find(DEFAULT_ISSUE_PREFIX_PATTERN + DEFAULT_ISSUE_NUMBER_PATTERN)
 		}
 
 		return issueNumber

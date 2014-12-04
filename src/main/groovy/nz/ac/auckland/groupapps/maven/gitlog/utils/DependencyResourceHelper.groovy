@@ -58,7 +58,7 @@ class DependencyResourceHelper {
 		if (resources) {
 			discoverMatchingResources(resources)
 		}
-		log.info("There are ${dependencyResourceCommits.size()} release notes totally")
+		log.info("There are ${dependencyResourceCommits.size()} release notes totally from all dependencies")
 	}
 
 	protected void discoverMatchingResources(Collection<Resource> resources) {
@@ -66,11 +66,29 @@ class DependencyResourceHelper {
 			String name = resource.name
 
 			if (name.indexOf('META-INF/release_notes.json') > 0) {
-				List<CommitBundle> resourceReleaseNotes  = new JsonSlurper().parse(resource.inputStream)
+				def resourceReleaseNotes  = new JsonSlurper().parse(resource.inputStream)
 				log.info("Found ${resourceReleaseNotes.size()} release notes in ${resource.name}")
-				dependencyResourceCommits.addAll(resourceReleaseNotes)
+				dependencyResourceCommits.addAll(resourceReleaseNotes.collect { return parseToCommitBundle(it) })
 			}
 		}
+	}
+
+	/**
+	 * Translate a lazy map to CommitBundle object
+	 *
+	 * @param lazyMap
+	 * @return
+	 */
+	protected CommitBundle parseToCommitBundle(def lazyMap) {
+		return new CommitBundle(
+				released: lazyMap.released,
+				version: lazyMap.version,
+				message: lazyMap.message,
+				issue: lazyMap.issue,
+				commitTime: lazyMap.commitTime,
+				committerName: lazyMap.committerName,
+				committerEmail: lazyMap.committerEmail
+		)
 	}
 
 	protected Resource dependencyIsResource(Artifact artifact) {

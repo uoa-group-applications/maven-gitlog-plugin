@@ -2,7 +2,7 @@ package nz.ac.auckland.groupapps.maven.gitlog.commit
 /**
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
-class CommitBundle {
+public class CommitBundle implements Comparable<CommitBundle> {
 
 	boolean released
 
@@ -16,6 +16,10 @@ class CommitBundle {
 
 	String committerEmail
 
-	Date commitTime
+	int commitTime
 
+	@Override
+	int compareTo(CommitBundle otherCommit) {
+		return otherCommit.commitTime <=> commitTime
+	}
 }

@@ -1,6 +1,7 @@
 package nz.ac.auckland.groupapps.maven.gitlog.utils
 
 import nz.ac.auckland.groupapps.maven.gitlog.PluginConstant
+import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitChecker
 import org.apache.maven.project.MavenProject
 import org.eclipse.jgit.revwalk.RevCommit
 
@@ -19,11 +20,22 @@ class VersionFetcher {
 	 * @return the version number in the commit message
 	 */
 	public static String fetchReleaseVersionNumber(MavenProject project, RevCommit revCommit) {
-		return fetchReleaseVersionNumber(project, revCommit.shortMessage)
+		return fetchReleaseVersionNumber(project, revCommit?.shortMessage ?: null)
 	}
 
 	public static String fetchReleaseVersionNumber(MavenProject project, String message) {
-		return message.replace(PluginConstant.DEFAULT_RELEASE_PATTERN, '').replace(project.artifactId, '').trim().substring(1)
+		String versionNumber = null
+		if (message && CommitChecker.isReleaseCommit(message)) {
+			versionNumber = message.replace(PluginConstant.DEFAULT_RELEASE_PATTERN, '').replace(project.artifactId, '').trim().substring(1)
+			if (versionNumber) {
+				try {
+					Double.parseDouble(versionNumber.toUpperCase().replace(PluginConstant.SNAPSHOT_PATTERN, ''))
+				} catch (NumberFormatException nfe) {
+					versionNumber = null
+				}
+			}
+		}
+		return versionNumber
 	}
 
 }

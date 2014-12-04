@@ -12,7 +12,7 @@ class CommitRender {
 	private CommitRender() {}
 
 	public static String render(CommitBundle commit) {
-		return "[${TimeRender.formatDate(commit.commitTime)}][Version ${commit.version}] - ${commit.message} (${commit.committerName},${commit.committerEmail})"
+		return "[${TimeRender.formatTimestamp(commit.commitTime)}][Version ${commit.version}] - ${commit.message} (${commit.committerName},${commit.committerEmail})"
 	}
 
 }

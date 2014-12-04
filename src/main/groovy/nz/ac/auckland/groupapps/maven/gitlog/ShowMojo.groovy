@@ -1,13 +1,16 @@
 package nz.ac.auckland.groupapps.maven.gitlog
 
 import groovy.transform.CompileStatic
+import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitMerger
 import nz.ac.auckland.groupapps.maven.gitlog.mojo.GitLogBaseMojo
 import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitBundle
 import nz.ac.auckland.groupapps.maven.gitlog.git.GitLogGenerator
 import nz.ac.auckland.groupapps.maven.gitlog.render.MavenLoggerRender
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
+import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
+import org.apache.maven.plugins.annotations.ResolutionScope
 
 /**
  * @goal show
@@ -15,7 +18,10 @@ import org.apache.maven.plugins.annotations.Mojo
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
 @CompileStatic
-@Mojo(name = 'show')
+@Mojo(name = 'show',
+		requiresProject = true,
+		requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
+)
 public class ShowMojo extends GitLogBaseMojo {
 
 	@Override
@@ -27,9 +33,14 @@ public class ShowMojo extends GitLogBaseMojo {
 			return
 		}
 
-		List<CommitBundle> allCommits = GitLogGenerator.generate(project, issuePrefix, getLog())
+		List<CommitBundle> allReleaseNotes = GitLogGenerator.generate(project, issuePrefix, getLog())
 
-		MavenLoggerRender mavenLoggerRender = new MavenLoggerRender(allCommits, log)
+		if (deployedArtifact) {
+			allReleaseNotes = CommitMerger.mergeForProject(project, allReleaseNotes, fetchDependencyReleaseNotes())
+		}
+
+
+		MavenLoggerRender mavenLoggerRender = new MavenLoggerRender(allReleaseNotes, log)
 		mavenLoggerRender.render()
 
 	}

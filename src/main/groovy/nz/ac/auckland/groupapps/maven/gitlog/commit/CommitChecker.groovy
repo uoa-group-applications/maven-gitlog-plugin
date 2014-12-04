@@ -6,9 +6,9 @@ import org.eclipse.jgit.revwalk.RevCommit
 /**
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
-class CommitHelper {
+class CommitChecker {
 
-	public CommitHelper() {}
+	public CommitChecker() {}
 
 	/**
 	 * Verify whether the passing commit is a release commit

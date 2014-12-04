@@ -3,7 +3,6 @@ package nz.ac.auckland.groupapps.maven.gitlog.commit
 import nz.ac.auckland.groupapps.maven.gitlog.PluginConstant
 import nz.ac.auckland.groupapps.maven.gitlog.utils.IssueFetcher
 import org.apache.commons.lang3.StringUtils
-import org.apache.maven.project.MavenProject
 import org.eclipse.jgit.revwalk.RevCommit
 
 /**
@@ -13,12 +12,7 @@ public class CommitUtils {
 
 	protected List<String> issuePrefixList = []
 
-	/**
-	 * Current maven project
-	 */
-	protected MavenProject project
-
-	public CommitUtils(String issuePrefix, MavenProject project) {
+	public CommitUtils(String issuePrefix) {
 		List<String> prefixList = []
 		if (issuePrefix?.contains(PluginConstant.ISSUE_PREFIX_SEPARATOR)) {
 			prefixList = issuePrefix.tokenize(',')
@@ -28,8 +22,6 @@ public class CommitUtils {
 				issuePrefixList.add(prefix.trim().toUpperCase())
 			}
 		}
-
-		this.project = project
 	}
 
 	/**
@@ -51,20 +43,6 @@ public class CommitUtils {
 	 * @return the commit bundle object
 	 */
 	public CommitBundle convertToBundle(RevCommit revCommit, boolean isReleased, String versionNumber) {
-		return convertToBundle(revCommit, isReleased, versionNumber, false)
-
-	}
-
-	/**
-	 * Convert RevCommit to CommitBundle object
-	 *
-	 * @param revCommit is the commit record
-	 * @param isReleased is the flag that current commit be released or not.
-	 * @param versionNumber is the release version number
-	 * @param isReleaseCommit is the flag whether current commit is a release commit
-	 * @return the commit bundle object
-	 */
-	public CommitBundle convertToBundle(RevCommit revCommit, boolean isReleased, String versionNumber, boolean isReleaseCommit) {
 		CommitBundle commitBundle = new CommitBundle()
 
 		commitBundle.released = isReleased
@@ -73,8 +51,7 @@ public class CommitUtils {
 		commitBundle.issue = IssueFetcher.fetchIssueNumber(issuePrefixList, revCommit.shortMessage)
 		commitBundle.committerName = revCommit.committerIdent.name
 		commitBundle.committerEmail = revCommit.committerIdent.emailAddress
-
-		commitBundle.commitTime = new Date(revCommit.commitTime * 1000L)
+		commitBundle.commitTime = revCommit.commitTime * 1000L
 
 		return commitBundle
 

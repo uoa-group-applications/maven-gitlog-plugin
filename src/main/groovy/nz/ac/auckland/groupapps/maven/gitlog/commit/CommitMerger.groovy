@@ -23,13 +23,15 @@ public class CommitMerger {
 			mergedCommits.addAll(localCommitBundleList)
 			mergedCommits.addAll(dependencyCommitBundleList)
 
-			finalCommitList = mergedCommits.sort(false) { it.commitTime.time * -1 }
+			finalCommitList = mergedCommits.sort(false) { CommitBundle commitBundle1, CommitBundle commitBundle2 ->
+				return commitBundle1 <=> commitBundle2
+			}
 
 			String versionNumber = project.version
 			boolean isSnapshot = versionNumber.toUpperCase().trim().endsWith(PluginConstant.SNAPSHOT_PATTERN)
 			finalCommitList.each { CommitBundle commitBundle ->
 
-				if (CommitHelper.isReleaseCommit(commitBundle.message)) {
+				if (CommitChecker.isReleaseCommit(commitBundle.message)) {
 					isSnapshot = false
 					versionNumber = VersionFetcher.fetchReleaseVersionNumber(project, commitBundle.message)
 				}
@@ -40,7 +42,9 @@ public class CommitMerger {
 
 		} else if (CollectionUtils.isEmpty(localCommitBundleList) && CollectionUtils.isNotEmpty(dependencyCommitBundleList)) {
 			dependencyCommitBundleList*.version = project?.version ?: '1.1-SNAPSHOT'
-			finalCommitList = dependencyCommitBundleList.sort(false) { it.commitTime ? (-1 * it.commitTime.time) : 0 }
+			finalCommitList = dependencyCommitBundleList.sort(false) { CommitBundle commitBundle1, CommitBundle commitBundle2 ->
+				return commitBundle1 <=> commitBundle2
+			}
 		} else if (CollectionUtils.isNotEmpty(localCommitBundleList) && CollectionUtils.isEmpty(dependencyCommitBundleList)) {
 			finalCommitList.addAll(localCommitBundleList)
 		}

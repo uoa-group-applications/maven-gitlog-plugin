@@ -1,6 +1,7 @@
 package nz.ac.auckland.groupapps.maven.gitlog
 
 import groovy.json.JsonBuilder
+import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitChecker
 import nz.ac.auckland.groupapps.maven.gitlog.mojo.GitLogBaseMojo
 import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitBundle
 import nz.ac.auckland.groupapps.maven.gitlog.git.GitLogGenerator
@@ -64,6 +65,9 @@ class ReleaseNoteMojo extends GitLogBaseMojo {
 	 * @param isJsonFormat is the flag whether the content be formatted in JSON
 	 */
 	public void cleanAndWriteReleaseNotes(File releaseNotes, List<CommitBundle> commitBundleList, boolean isJsonFormat) {
+		/**
+		 * Remove an existing one
+		 */
 		if (releaseNotes.exists()) {
 			releaseNotes.delete()
 		}
@@ -72,7 +76,7 @@ class ReleaseNoteMojo extends GitLogBaseMojo {
 		 * Remove all release commit from release notes
 		 */
 		commitBundleList.removeAll { CommitBundle commitBundle ->
-			return commitBundle.releaseCommit
+			return CommitChecker.isReleaseCommit(commitBundle.message)
 		}
 
 		if (isJsonFormat) {
