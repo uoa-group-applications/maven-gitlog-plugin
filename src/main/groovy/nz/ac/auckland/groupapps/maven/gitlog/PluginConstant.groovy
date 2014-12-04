@@ -20,7 +20,6 @@ public class PluginConstant {
 
 	public static final List<String> VALID_PACKAGE_TYPE = ['jar', 'war', 'bathe-war']
 
-
 	/**
 	 * The separator in plugin configuration.
 	 */

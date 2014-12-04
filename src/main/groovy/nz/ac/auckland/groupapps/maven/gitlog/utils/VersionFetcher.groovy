@@ -5,10 +5,14 @@ import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitChecker
 import org.apache.maven.project.MavenProject
 import org.eclipse.jgit.revwalk.RevCommit
 
+import java.util.regex.Pattern
+
 /**
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
 class VersionFetcher {
+
+	public static final String VERSION_PATTERN = '[1-9][0-9]*(\\.[0-9]+)*'
 
 	private VersionFetcher() {}
 
@@ -27,12 +31,9 @@ class VersionFetcher {
 		String versionNumber = null
 		if (message && CommitChecker.isReleaseCommit(message)) {
 			versionNumber = message.replace(PluginConstant.DEFAULT_RELEASE_PATTERN, '').replace(project.artifactId, '').trim().substring(1)
-			if (versionNumber) {
-				try {
-					Double.parseDouble(versionNumber.toUpperCase().replace(PluginConstant.SNAPSHOT_PATTERN, ''))
-				} catch (NumberFormatException nfe) {
-					versionNumber = null
-				}
+
+			if (versionNumber && !Pattern.compile(VERSION_PATTERN).matcher(versionNumber.trim().toUpperCase().replace(PluginConstant.SNAPSHOT_PATTERN, '')).matches()) {
+				versionNumber = null
 			}
 		}
 		return versionNumber

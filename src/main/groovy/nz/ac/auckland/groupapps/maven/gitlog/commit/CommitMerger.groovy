@@ -1,6 +1,7 @@
 package nz.ac.auckland.groupapps.maven.gitlog.commit
 
 import nz.ac.auckland.groupapps.maven.gitlog.PluginConstant
+import nz.ac.auckland.groupapps.maven.gitlog.render.CommitRender
 import nz.ac.auckland.groupapps.maven.gitlog.utils.VersionFetcher
 import org.apache.commons.collections4.CollectionUtils
 import org.apache.maven.project.MavenProject
@@ -26,6 +27,7 @@ public class CommitMerger {
 			finalCommitList = mergedCommits.sort(false) { CommitBundle commitBundle1, CommitBundle commitBundle2 ->
 				return commitBundle1 <=> commitBundle2
 			}
+
 
 			String versionNumber = project.version
 			boolean isSnapshot = versionNumber.toUpperCase().trim().endsWith(PluginConstant.SNAPSHOT_PATTERN)

@@ -16,7 +16,7 @@ public class CommitBundle implements Comparable<CommitBundle> {
 
 	String committerEmail
 
-	int commitTime
+	long commitTime
 
 	@Override
 	int compareTo(CommitBundle otherCommit) {

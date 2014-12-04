@@ -30,7 +30,12 @@ class VersionFetcherTest {
 
 		assert VersionFetcher.fetchReleaseVersionNumber(mockProject(), '[maven-release-plugin] prepare release ram-domain-1.1') == '1.1'
 		assert VersionFetcher.fetchReleaseVersionNumber(mockProject(), '[maven-release-plugin] prepare release ram-domain-1.1-SNAPSHOT') == '1.1-SNAPSHOT'
+
+		assert VersionFetcher.fetchReleaseVersionNumber(mockProject(), '[maven-release-plugin] prepare release ram-domain-10.90.01') == '10.90.01'
+		assert VersionFetcher.fetchReleaseVersionNumber(mockProject(), '[maven-release-plugin] prepare release ram-domain-10.9.02-SNAPSHOT') == '10.9.02-SNAPSHOT'
+
 	}
+
 
 	protected MavenProject mockProject() {
 		return [
