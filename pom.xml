@@ -11,7 +11,7 @@
 
 	<groupId>nz.ac.auckland.groupapps.maven</groupId>
 	<artifactId>maven-gitlog-plugin</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.1</version>
 	<packaging>maven-plugin</packaging>
 	<name>Maven Git Log Plugin</name>
 	<description>
@@ -85,91 +85,24 @@
 					<skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
 					<goalPrefix>gitlog</goalPrefix>
 				</configuration>
-				<!--<executions>-->
-				<!--<execution>-->
-				<!--<id>mojo-descriptor</id>-->
-				<!--<goals>-->
-				<!--<goal>descriptor</goal>-->
-				<!--</goals>-->
-				<!--</execution>-->
-				<!--&lt;!&ndash; if you want to generate help goal &ndash;&gt;-->
-				<!--<execution>-->
-				<!--<id>generated-helpmojo</id>-->
-				<!--<goals>-->
-				<!--<goal>helpmojo</goal>-->
-				<!--</goals>-->
-				<!--</execution>-->
-				<!--</executions>-->
+				<executions>
+					<execution>
+						<id>mojo-descriptor</id>
+						<goals>
+							<goal>descriptor</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generated-helpmojo</id>
+						<goals>
+							<goal>helpmojo</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
-
-			<!--<plugin>-->
-			<!--<groupId>org.apache.maven.plugins</groupId>-->
-			<!--<artifactId>maven-compiler-plugin</artifactId>-->
-			<!--<version>3.2</version>-->
-			<!--<configuration>-->
-			<!--<source>1.7</source>-->
-			<!--<target>1.7</target>-->
-			<!--</configuration>-->
-			<!--</plugin>-->
-
-			<!--<plugin>-->
-			<!--<groupId>org.apache.maven.plugins</groupId>-->
-			<!--<artifactId>maven-dependency-plugin</artifactId>-->
-			<!--<version>2.9</version>-->
-			<!--<executions>-->
-			<!--<execution>-->
-			<!--<phase>package</phase>-->
-			<!--<goals>-->
-			<!--<goal>tree</goal>-->
-			<!--<goal>analyze-only</goal>-->
-			<!--</goals>-->
-			<!--</execution>-->
-			<!--</executions>-->
-			<!--<configuration>-->
-			<!--<failOnWarning>true</failOnWarning>-->
-			<!--<artifactItems />-->
-			<!--</configuration>-->
-			<!--</plugin>-->
-
-			<!--<plugin>-->
-			<!--<groupId>nz.ac.auckland.groupapps.maven</groupId>-->
-			<!--<artifactId>maven-gitlog-plugin</artifactId>-->
-			<!--<version>1.1-SNAPSHOT</version>-->
-			<!--<executions>-->
-			<!--<execution>-->
-			<!--<id>build-release-notes</id>-->
-			<!--<phase>generate-resources</phase>-->
-			<!--<goals>-->
-			<!--<goal>compile</goal>-->
-			<!--</goals>-->
-			<!--</execution>-->
-			<!--</executions>-->
-			<!--</plugin>-->
 
 		</plugins>
 	</build>
-
-	<!--<profiles>-->
-	<!--<profile>-->
-	<!--<id>gitlog</id>-->
-	<!--<build>-->
-	<!--<plugins>-->
-	<!--<plugin>-->
-	<!--<groupId>nz.ac.auckland.groupapps.maven</groupId>-->
-	<!--<artifactId>maven-gitlog-plugin</artifactId>-->
-	<!--<version>1.7.0</version>-->
-	<!--<executions>-->
-	<!--<execution>-->
-	<!--<goals>-->
-	<!--<goal>generate</goal>-->
-	<!--</goals>-->
-	<!--</execution>-->
-	<!--</executions>-->
-	<!--</plugin>					-->
-	<!--</plugins>-->
-	<!--</build>-->
-	<!--</profile>-->
-	<!--</profiles>-->
 
 	<scm>
 		<url>git@github.com:uoa-group-applications/maven-gitlog-plugin.git</url>

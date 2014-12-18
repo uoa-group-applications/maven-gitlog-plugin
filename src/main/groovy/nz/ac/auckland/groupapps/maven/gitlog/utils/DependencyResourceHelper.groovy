@@ -66,7 +66,7 @@ class DependencyResourceHelper {
 			String name = resource.name
 
 			if (name.indexOf('META-INF/release_notes.json') > 0) {
-				def resourceReleaseNotes  = new JsonSlurper().parse(resource.inputStream)
+				def resourceReleaseNotes = new JsonSlurper().parse(resource.inputStream)
 				log.info("Found ${resourceReleaseNotes.size()} release notes in ${resource.name}")
 				dependencyResourceCommits.addAll(resourceReleaseNotes.collect { return parseToCommitBundle(it) })
 			}

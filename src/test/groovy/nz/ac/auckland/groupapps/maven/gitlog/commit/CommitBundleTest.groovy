@@ -8,7 +8,6 @@ import org.junit.Test
 class CommitBundleTest {
 
 
-
 	@Test
 	public void testCommitBundleCompare() {
 

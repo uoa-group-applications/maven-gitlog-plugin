@@ -75,7 +75,7 @@ class CommitMergerTest {
 		]
 
 		def project = [
-				getVersion: {
+				getVersion   : {
 					return '1.4-SNAPSHOT'
 				},
 				getArtifactId: {

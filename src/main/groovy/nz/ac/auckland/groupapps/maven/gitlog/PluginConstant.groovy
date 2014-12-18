@@ -31,6 +31,6 @@ public class PluginConstant {
 	 */
 	public static final String DEFAULT_RELEASE_PATTERN = '[maven-release-plugin] prepare release'
 
-	public static final String SNAPSHOT_PATTERN='-SNAPSHOT'
+	public static final String SNAPSHOT_PATTERN = '-SNAPSHOT'
 
 }

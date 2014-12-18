@@ -1,7 +1,6 @@
 package nz.ac.auckland.groupapps.maven.gitlog.commit
 
 import nz.ac.auckland.groupapps.maven.gitlog.PluginConstant
-import nz.ac.auckland.groupapps.maven.gitlog.render.CommitRender
 import nz.ac.auckland.groupapps.maven.gitlog.utils.VersionFetcher
 import org.apache.commons.collections4.CollectionUtils
 import org.apache.maven.project.MavenProject

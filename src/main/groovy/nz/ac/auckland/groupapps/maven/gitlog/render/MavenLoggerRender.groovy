@@ -42,7 +42,7 @@ class MavenLoggerRender {
 
 		revCommitList.each { CommitBundle revCommit ->
 //			if (!revCommit.releaseCommit) {
-				renderCommit(revCommit)
+			renderCommit(revCommit)
 //			}
 		}
 

@@ -1,6 +1,5 @@
 package nz.ac.auckland.groupapps.maven.gitlog.commit
 
-import org.eclipse.jgit.revwalk.RevCommit
 import org.junit.Test
 
 /**
