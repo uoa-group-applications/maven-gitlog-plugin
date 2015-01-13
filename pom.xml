@@ -10,10 +10,10 @@
 	</parent>
 
 	<groupId>nz.ac.auckland.groupapps.maven</groupId>
-	<artifactId>maven-gitlog-plugin</artifactId>
-	<version>1.1</version>
+	<artifactId>uoa-gitlog-plugin</artifactId>
+	<version>1.1-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
-	<name>Maven Git Log Plugin</name>
+	<name>UOA Git Log Plugin</name>
 	<description>
 		Generates a release note based on commits to a git repository in text format
 		showing the changes that are included in each version.
@@ -22,7 +22,7 @@
 		releasing the maven project so that the remote server can lookup and update
 		JIRA ticket based on an accurate list of commits that the current package includes.
 	</description>
-	<url>git@github.com:uoa-group-applications/maven-gitlog-plugin.git</url>
+	<url>git@github.com:uoa-group-applications/uoa-gitlog-plugin.git</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -105,9 +105,9 @@
 	</build>
 
 	<scm>
-		<url>git@github.com:uoa-group-applications/maven-gitlog-plugin.git</url>
-		<connection>scm:git:git@github.com:uoa-group-applications/maven-gitlog-plugin.git</connection>
-		<developerConnection>scm:git:git@github.com:uoa-group-applications/maven-gitlog-plugin.git</developerConnection>
+		<url>git@github.com:uoa-group-applications/uoa-gitlog-plugin.git</url>
+		<connection>scm:git:git@github.com:uoa-group-applications/uoa-gitlog-plugin.git</connection>
+		<developerConnection>scm:git:git@github.com:uoa-group-applications/uoa-gitlog-plugin.git</developerConnection>
 	</scm>
 
 </project>

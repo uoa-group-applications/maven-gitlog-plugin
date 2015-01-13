@@ -2,12 +2,11 @@ package nz.ac.auckland.groupapps.maven.gitlog
 
 import groovy.json.JsonBuilder
 import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitBundle
-import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitChecker
-import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitMerger
+import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitHelper
 import nz.ac.auckland.groupapps.maven.gitlog.git.GitLogGenerator
 import nz.ac.auckland.groupapps.maven.gitlog.jira.JiraVerification
 import nz.ac.auckland.groupapps.maven.gitlog.mojo.GitLogBaseMojo
-import nz.ac.auckland.groupapps.maven.gitlog.render.CommitRender
+import nz.ac.auckland.groupapps.maven.gitlog.render.LoggerRender
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugin.MojoFailureException
 import org.apache.maven.plugins.annotations.LifecyclePhase
@@ -35,7 +34,7 @@ class ReleaseNoteMojo extends GitLogBaseMojo {
 		List<CommitBundle> allReleaseNotes = GitLogGenerator.generate(project, issuePrefix, getLog())
 
 		if (deployedArtifact) {
-			allReleaseNotes = CommitMerger.mergeForProject(project, allReleaseNotes, fetchDependencyReleaseNotes())
+			allReleaseNotes = CommitHelper.mergeForProject(project, allReleaseNotes, fetchDependencyReleaseNotes())
 		}
 
 		if (requireJiraVerification() && !JiraVerification.verify(jiraVerificationUrl, project, allReleaseNotes)) {
@@ -85,7 +84,7 @@ class ReleaseNoteMojo extends GitLogBaseMojo {
 		 * Remove all release commit from release notes
 		 */
 		commitBundleList.removeAll { CommitBundle commitBundle ->
-			return CommitChecker.isReleaseCommit(commitBundle.message)
+			return CommitHelper.isReleaseCommit(commitBundle.message)
 		}
 
 		if (isJsonFormat) {
@@ -95,7 +94,7 @@ class ReleaseNoteMojo extends GitLogBaseMojo {
 		} else {
 			releaseNotes.withWriter { Writer writer ->
 				commitBundleList.each { CommitBundle revCommit ->
-					writer << CommitRender.render(revCommit) << '\n'
+					writer << LoggerRender.convertCommitToString(revCommit) << '\n'
 				}
 				writer << '\n\n'
 			}

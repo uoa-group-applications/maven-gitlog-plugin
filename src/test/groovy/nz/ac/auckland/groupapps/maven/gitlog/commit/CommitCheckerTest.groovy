@@ -9,7 +9,7 @@ class CommitCheckerTest {
 
 	@Test
 	public void testReleaseCommitMessage() {
-		assert !CommitChecker.isReleaseCommit(null)
+		assert !CommitHelper.isReleaseCommit(null)
 	}
 
 }

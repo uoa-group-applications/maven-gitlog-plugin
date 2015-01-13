@@ -11,10 +11,10 @@ class CommitMergerTest {
 
 	@Test
 	public void testBlankMerge() {
-		assert [] == CommitMerger.mergeForProject(null, [], [])
-		assert [] == CommitMerger.mergeForProject(null, [], null)
-		assert [] == CommitMerger.mergeForProject(null, null, null)
-		assert [] == CommitMerger.mergeForProject(null, null, [])
+		assert [] == CommitHelper.mergeForProject(null, [], [])
+		assert [] == CommitHelper.mergeForProject(null, [], null)
+		assert [] == CommitHelper.mergeForProject(null, null, null)
+		assert [] == CommitHelper.mergeForProject(null, null, [])
 	}
 
 	@Test
@@ -25,7 +25,7 @@ class CommitMergerTest {
 				new CommitBundle()
 		]
 
-		def mergedCommits = CommitMerger.mergeForProject(null, null, dependencyCommit)
+		def mergedCommits = CommitHelper.mergeForProject(null, null, dependencyCommit)
 
 		assert mergedCommits.size() == 3
 		assert mergedCommits.every { it.version.equals('1.1-SNAPSHOT') }
@@ -39,7 +39,7 @@ class CommitMergerTest {
 					return '1.2'
 				}
 		] as MavenProject
-		def mergedCommits = CommitMerger.mergeForProject(project, localCommit, [])
+		def mergedCommits = CommitHelper.mergeForProject(project, localCommit, [])
 
 		assert mergedCommits.size() == 2
 		assert mergedCommits.every { it.version.equals('1.3') }
@@ -83,7 +83,7 @@ class CommitMergerTest {
 				}
 		] as MavenProject
 
-		def mergedCommits = CommitMerger.mergeForProject(project, localCommit, dependencyCommit)
+		def mergedCommits = CommitHelper.mergeForProject(project, localCommit, dependencyCommit)
 
 		assert mergedCommits.size() == 15
 

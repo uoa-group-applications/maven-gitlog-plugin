@@ -1,8 +1,11 @@
 package nz.ac.auckland.groupapps.maven.gitlog.utils
 
+import groovy.transform.CompileStatic
+
 /**
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
+@CompileStatic
 public class IssueFetcher {
 
 	public static final String DEFAULT_ISSUE_NUMBER_PATTERN = '-[1-9][0-9]*'

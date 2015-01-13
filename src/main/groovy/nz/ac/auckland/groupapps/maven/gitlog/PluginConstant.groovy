@@ -2,6 +2,9 @@ package nz.ac.auckland.groupapps.maven.gitlog
 
 import groovy.transform.CompileStatic
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 /**
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
@@ -32,5 +35,10 @@ public class PluginConstant {
 	public static final String DEFAULT_RELEASE_PATTERN = '[maven-release-plugin] prepare release'
 
 	public static final String SNAPSHOT_PATTERN = '-SNAPSHOT'
+
+	public static final String DEFAULT_FORMAT = "yyyy-MM-dd HH:mm:ss"
+
+	public static final DateFormat DATE_FORMAT = new SimpleDateFormat(DEFAULT_FORMAT)
+
 
 }

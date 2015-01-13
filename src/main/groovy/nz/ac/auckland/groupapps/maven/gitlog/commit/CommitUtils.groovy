@@ -1,5 +1,6 @@
 package nz.ac.auckland.groupapps.maven.gitlog.commit
 
+import groovy.transform.CompileStatic
 import nz.ac.auckland.groupapps.maven.gitlog.PluginConstant
 import nz.ac.auckland.groupapps.maven.gitlog.utils.IssueFetcher
 import org.apache.commons.lang3.StringUtils
@@ -8,6 +9,7 @@ import org.eclipse.jgit.revwalk.RevCommit
 /**
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
+@CompileStatic
 public class CommitUtils {
 
 	protected List<String> issuePrefixList = []

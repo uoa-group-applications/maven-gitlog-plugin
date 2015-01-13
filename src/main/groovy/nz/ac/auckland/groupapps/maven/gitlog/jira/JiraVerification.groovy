@@ -1,12 +1,14 @@
 package nz.ac.auckland.groupapps.maven.gitlog.jira
 
 import groovy.json.JsonOutput
+import groovy.transform.CompileStatic
 import nz.ac.auckland.groupapps.maven.gitlog.commit.CommitBundle
 import org.apache.maven.project.MavenProject
 
 /**
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
+@CompileStatic
 class JiraVerification {
 
 	private JiraVerification() {

@@ -1,16 +1,30 @@
 package nz.ac.auckland.groupapps.maven.gitlog.commit
 
+import groovy.transform.CompileStatic
 import nz.ac.auckland.groupapps.maven.gitlog.PluginConstant
 import nz.ac.auckland.groupapps.maven.gitlog.utils.VersionFetcher
 import org.apache.commons.collections4.CollectionUtils
 import org.apache.maven.project.MavenProject
+import org.eclipse.jgit.revwalk.RevCommit
 
 /**
  * @author Kefeng Deng (kden022, k.deng@auckland.ac.nz)
  */
-public class CommitMerger {
+@CompileStatic
+class CommitHelper {
 
-	private CommitMerger() {
+	/**
+	 * Verify whether the passing commit is a release commit
+	 *
+	 * @param revCommit is the commit record
+	 * @return true if the commit message contains maven release message
+	 */
+	public static boolean isReleaseCommit(RevCommit revCommit) {
+		return isReleaseCommit(revCommit?.shortMessage)
+	}
+
+	public static boolean isReleaseCommit(String commitMessage) {
+		return commitMessage?.startsWith(PluginConstant.DEFAULT_RELEASE_PATTERN)
 	}
 
 	public static List<CommitBundle> mergeForProject(MavenProject project, List<CommitBundle> localCommitBundleList, List<CommitBundle> dependencyCommitBundleList) {
@@ -27,12 +41,11 @@ public class CommitMerger {
 				return commitBundle1 <=> commitBundle2
 			}
 
-
 			String versionNumber = project.version
 			boolean isSnapshot = versionNumber.toUpperCase().trim().endsWith(PluginConstant.SNAPSHOT_PATTERN)
 			finalCommitList.each { CommitBundle commitBundle ->
 
-				if (CommitChecker.isReleaseCommit(commitBundle.message)) {
+				if (isReleaseCommit(commitBundle.message)) {
 					isSnapshot = false
 					versionNumber = VersionFetcher.fetchReleaseVersionNumber(project, commitBundle.message)
 				}
