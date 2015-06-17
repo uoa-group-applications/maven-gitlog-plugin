@@ -14,7 +14,7 @@ import java.util.regex.Pattern
 @CompileStatic
 class VersionFetcher {
 
-	public static final String VERSION_PATTERN = '[1-9][0-9]*(\\.[0-9]+)*'
+	public static final Pattern VERSION_PATTERN = Pattern.compile('[1-9][0-9]*(\\.[0-9]+)*')
 
 	private VersionFetcher() {}
 
@@ -34,7 +34,7 @@ class VersionFetcher {
 		if (message && CommitHelper.isReleaseCommit(message)) {
 			versionNumber = message.replace(PluginConstant.DEFAULT_RELEASE_PATTERN, '').replace(project.artifactId, '').trim().substring(1)
 
-			if (versionNumber && !Pattern.compile(VERSION_PATTERN).matcher(versionNumber.trim().toUpperCase().replace(PluginConstant.SNAPSHOT_PATTERN, '')).matches()) {
+			if (versionNumber && !VERSION_PATTERN.matcher(versionNumber.trim().toUpperCase().replace(PluginConstant.SNAPSHOT_PATTERN, '')).matches()) {
 				versionNumber = null
 			}
 		}

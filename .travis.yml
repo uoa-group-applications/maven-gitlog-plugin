@@ -1,6 +1,6 @@
 language: groovy
 jdk:
-- oraclejdk8
+- oraclejdk7
 before_install:
 - unset GEM_PATH
 before_script:
