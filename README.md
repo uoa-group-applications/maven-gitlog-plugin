@@ -1,4 +1,5 @@
-= UOA GitLog Plugin
+UOA GitLog Plugin
+===
 
 This plugin aims to enhance Kanban Flow across multiple teams in UOA.
 

@@ -3,5 +3,7 @@ jdk:
 - oraclejdk8
 before_install:
 - unset GEM_PATH
+before_script:
+- mvn -U clean dependency:tree
 after_success:
-- mvn jacoco:report coveralls:report
+- mvn -B clean verify jacoco:report coveralls:report
