@@ -2,7 +2,7 @@ UOA GitLog Plugin
 ===
 
 [![Build Status](https://travis-ci.org/uoa-group-applications/uoa-gitlog-plugin.svg?branch=master)](https://travis-ci.org/uoa-group-applications/uoa-gitlog-plugin)
-[![Coverage Status](https://coveralls.io/repos/uoa-group-applications/uoa-gitlog-plugin/badge.svg)](https://coveralls.io/r/uoa-group-applications/uoa-gitlog-plugin)
+[![Coverage Status](https://coveralls.io/repos/uoa-group-applications/uoa-gitlog-plugin/badge.svg?branch=master)](https://coveralls.io/r/uoa-group-applications/uoa-gitlog-plugin?branch=master)
 
 This plugin aims to enhance Kanban Flow across multiple teams in UOA.
 
