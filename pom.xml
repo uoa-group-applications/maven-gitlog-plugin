@@ -11,7 +11,7 @@
 
 	<groupId>nz.ac.auckland.groupapps.maven</groupId>
 	<artifactId>uoa-gitlog-plugin</artifactId>
-	<version>1.2-SNAPSHOT</version>
+	<version>1.2</version>
 	<packaging>maven-plugin</packaging>
 	<name>UOA Git Log Plugin</name>
 	<description>
@@ -26,7 +26,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.6</java.version>
+		<java.version>1.7</java.version>
 	</properties>
 
 	<dependencies>
@@ -141,7 +141,7 @@
 		<url>git@github.com:uoa-group-applications/uoa-gitlog-plugin.git</url>
 		<connection>scm:git:git@github.com:uoa-group-applications/uoa-gitlog-plugin.git</connection>
 		<developerConnection>scm:git:git@github.com:uoa-group-applications/uoa-gitlog-plugin.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>uoa-gitlog-plugin-1.2</tag>
 	</scm>
 
 </project>
