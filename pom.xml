@@ -10,7 +10,7 @@
 
 	<groupId>nz.ac.auckland.groupapps.maven</groupId>
 	<artifactId>uoa-gitlog-plugin</artifactId>
-	<version>1.2</version>
+	<version>1.3-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 	<name>UOA Git Log Plugin</name>
 	<description>
@@ -140,7 +140,7 @@
 		<url>git@github.com:uoa-group-applications/uoa-gitlog-plugin.git</url>
 		<connection>scm:git:git@github.com:uoa-group-applications/uoa-gitlog-plugin.git</connection>
 		<developerConnection>scm:git:git@github.com:uoa-group-applications/uoa-gitlog-plugin.git</developerConnection>
-		<tag>uoa-gitlog-plugin-1.2</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 </project>
